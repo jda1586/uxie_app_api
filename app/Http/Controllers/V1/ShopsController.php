@@ -4,12 +4,25 @@ namespace App\Http\Controllers\V1;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Input;
+use Validator;
 
 class ShopsController extends Controller
 {
     public function index()
     {
+        $validator = Validator::make(Input::all(), [
+            'category' => 'required|string',
+            'location' => 'required|array'
+        ]);
+        if ($validator->fails())
+            return response()->json([
+                'ok' => false,
+                'error' => $validator->errors()->toArray(),
+            ]);
+
         return response()->json([
+            'ok' => true,
             'page' => [],
             'shops' => [
                 [
