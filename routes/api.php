@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['prefix' => 'shops'], function () {
+Route::group(['prefix' => 'shops', 'as' => 'shops.', 'namespace' => 'V1'], function () {
     Route::post('/', 'ShopsController@index')->name('index');
 });
 
