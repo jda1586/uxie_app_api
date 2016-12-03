@@ -23,21 +23,23 @@ class ShopsController extends Controller
             ]);
 
         $shops = Shop::where('category', Input::get('category'))->orderBy('score', 'ASC')->get();
+        $shops = $shops->map(function ($shop, $key) {
+            $image = $shop->images->first();
+            return [
+                'id' => $shop->id,
+                'name' => $shop->name,
+                'image' => $image->path . $image->file,
+                'score' => $shop->score,
+                'description' => $shop->description,
+                'cost' => $shop->cost,
+                'location' => [$shop->latitude, $shop->longitude]
+            ];
+        });
         return response()->json([
             'ok' => true,
             'page' => [1, 1],
-            'shops' => $shops->map(function ($shop, $key) {
-                $image = $shop->images->first();
-                return [
-                    'id' => $shop->id,
-                    'name' => $shop->name,
-                    'image' => $image->path . $image->file,
-                    'score' => $shop->score,
-                    'description' => $shop->description,
-                    'cost' => $shop->cost,
-                    'location' => [$shop->latitude, $shop->longitude]
-                ];
-            }),
+            'count' => $shops->count(),
+            'shops' => $shops,
         ]);
     }
 
