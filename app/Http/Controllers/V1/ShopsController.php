@@ -23,7 +23,7 @@ class ShopsController extends Controller
 
         return response()->json([
             'ok' => true,
-            'page' => [],
+            'page' => [1, 1],
             'shops' => [
                 [
                     'id' => 1,
@@ -54,5 +54,19 @@ class ShopsController extends Controller
                 ]
             ]
         ]);
+    }
+
+    public function show()
+    {
+        $validator = Validator::make(Input::all(), [
+ 
+        ]);
+        if ($validator->fails())
+            return response()->json([
+                'ok' => false,
+                'error' => $validator->errors()->toArray(),
+            ]);
+
+
     }
 }
