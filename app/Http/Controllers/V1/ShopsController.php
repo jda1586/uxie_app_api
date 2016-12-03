@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Shop;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Input;
@@ -21,50 +22,32 @@ class ShopsController extends Controller
                 'error' => $validator->errors()->toArray(),
             ]);
 
+        $shops = Shop::where('category', Input::get('category'))->orderBy('score', 'ASC')->get();
         return response()->json([
             'ok' => true,
             'page' => [1, 1],
-            'shops' => [
-                [
-                    'id' => 1,
-                    'name' => 'Shop testing 1',
-                    'image' => '',
-                    'score' => 4.8,
-                    'description' => '',
-                    'price' => 2,
-                    'location' => [0, 0]
-                ],
-                [
-                    'id' => 2,
-                    'name' => 'Shop testing 2',
-                    'image' => '',
-                    'score' => 4.8,
-                    'description' => '',
-                    'price' => 2,
-                    'location' => [0, 0]
-                ],
-                [
-                    'id' => 1,
-                    'name' => 'Shop testing 1',
-                    'image' => '',
-                    'score' => 4.8,
-                    'description' => '',
-                    'price' => 2,
-                    'location' => [0, 0]
-                ]
-            ]
+            'shops' => $shops->map(function ($shop, $key) {
+                $image = $shop->images->first();
+                return [
+                    'id' => $shop->id,
+                    'name' => $shop->name,
+                    'image' => $image->path . $image->file,
+                    'score' => $shop->score,
+                    'description' => $shop->description,
+                    'cost' => $shop->cost,
+                    'location' => [$shop->latitude, $shop->longitude]
+                ];
+            }),
         ]);
     }
 
-    public function show()
+    public function show($id)
     {
-        $validator = Validator::make(Input::all(), [
- 
-        ]);
-        if ($validator->fails())
+        $shop = Shop::find($id);
+        if (!$shop)
             return response()->json([
                 'ok' => false,
-                'error' => $validator->errors()->toArray(),
+                'error' => 'id shop invalid',
             ]);
 
 
