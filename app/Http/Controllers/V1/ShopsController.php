@@ -10,6 +10,9 @@ use Validator;
 
 class ShopsController extends Controller
 {
+    /**
+     * @return mixed
+     */
     public function index()
     {
         $validator = Validator::make(Input::all(), [
@@ -29,9 +32,9 @@ class ShopsController extends Controller
                 'id' => $shop->id,
                 'name' => $shop->name,
                 'image' => $image->path . $image->file,
-                'score' => $shop->score,
+                'score' => 0, //$shop->score,
                 'description' => $shop->description,
-                'cost' => $shop->cost,
+                'cost' => 0, //$shop->cost,
                 'location' => [$shop->latitude, $shop->longitude]
             ];
         });
