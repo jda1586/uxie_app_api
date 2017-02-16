@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\V1;
 
+use App\Category;
 use App\Shop;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -25,8 +26,9 @@ class ShopsController extends Controller
                 'error' => $validator->errors()->toArray(),
             ]);
 
-        $shops = Shop::where('category', Input::get('category'))->orderBy('score', 'ASC')->get();
-        $shops = $shops->map(function ($shop, $key) {
+        //orderBy('score', 'ASC')
+        $shops = Category::whereCode(Input::get('category'))->first()->shops();
+        $shops->map(function ($shop, $key) {
             $image = $shop->images->first();
             return [
                 'id' => $shop->id,
@@ -46,6 +48,10 @@ class ShopsController extends Controller
         ]);
     }
 
+    /**
+     * @param $id
+     * @return mixed
+     */
     public function show($id)
     {
         $shop = Shop::find($id);
