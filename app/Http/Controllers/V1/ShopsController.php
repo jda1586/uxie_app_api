@@ -28,12 +28,12 @@ class ShopsController extends Controller
 
         //orderBy('score', 'ASC')
         $shops = Category::whereCode(Input::get('category'))->first()->shops;
-        $shops->map(function ($shop, $key) {
-            $image = $shop->images->first();
+        $resp = $shops->map(function ($shop, $key) {
+            //$image = $shop->images->first();
             return [
                 'id' => $shop->id,
                 'name' => $shop->name,
-                'image' => $image->path . $image->file,
+                'image' => '', //$image->path . $image->file,
                 'score' => 0, //$shop->score,
                 'description' => $shop->description,
                 'cost' => 0, //$shop->cost,
@@ -43,8 +43,8 @@ class ShopsController extends Controller
         return response()->json([
             'ok' => true,
             'page' => [1, 1],
-            'count' => $shops->count(),
-            'shops' => $shops,
+            'count' => $resp->count(),
+            'shops' => $resp,
         ]);
     }
 
