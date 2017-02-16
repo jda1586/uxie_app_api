@@ -35,7 +35,7 @@ class ShopsController extends Controller
                 'name' => $shop->name,
                 'image' => '', //$image->path . $image->file,
                 'score' => 0, //$shop->score,
-                'description' => $shop->description,
+                'description' => '', //$shop->description,
                 'cost' => 0, //$shop->cost,
                 'location' => [$shop->latitude, $shop->longitude]
             ];
