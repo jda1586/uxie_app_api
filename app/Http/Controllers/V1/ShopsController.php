@@ -27,7 +27,7 @@ class ShopsController extends Controller
             ]);
 
         //orderBy('score', 'ASC')
-        $shops = Category::whereCode(Input::get('category'))->first()->shops;
+        $shops = Category::whereCode(Input::get('category'))->first()->shops()->where('status','active')->get();
         $resp = $shops->map(function ($shop, $key) {
             //$image = $shop->images->first();
             return [
