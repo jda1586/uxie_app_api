@@ -11,8 +11,9 @@ use Validator;
 
 class ShopsController extends Controller
 {
+
     /**
-     * @return mixed
+     * @return \Illuminate\Http\JsonResponse
      */
     public function index()
     {
@@ -27,7 +28,7 @@ class ShopsController extends Controller
             ]);
 
         //orderBy('score', 'ASC')
-        $shops = Category::whereCode(Input::get('category'))->first()->shops()->where('status','active')->get();
+        $shops = Category::whereCode(Input::get('category'))->first()->shops()->where('status', 'active')->get();
         $resp = $shops->map(function ($shop, $key) {
             //$image = $shop->images->first();
             return [
@@ -41,7 +42,9 @@ class ShopsController extends Controller
             ];
         });
         return response()->json([
-
+            'ok' => true,
+            'page' => [1, 1],
+            'count' => $resp->count(),
             'shops' => $resp,
         ]);
     }
